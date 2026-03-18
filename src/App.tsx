@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { getPokemons } from './api/pokemon'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
@@ -6,6 +8,8 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const { data } = useQuery({ queryKey: ['pokemons'], queryFn: getPokemons })
+  console.log(data)
 
   return (
     <>
