@@ -21,6 +21,9 @@ export function PokemonCard({ pokemon }: PokemonCardProps) {
             src={imageUrl}
             alt={pokemon.name}
             loading="lazy"
+            onError={(e) => {
+              e.currentTarget.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png";
+            }}
           />
         </div>
       }
