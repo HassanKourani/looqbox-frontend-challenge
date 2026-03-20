@@ -29,3 +29,10 @@ export async function getPokemons(page: number): Promise<PokemonListResponse> {
   if (!response.ok) throw new Error("Failed to fetch pokemons");
   return response.json();
 }
+
+export async function getAllPokemons(): Promise<PokemonListItem[]> {
+  const response = await fetch(`${BASE_URL}/pokemon?limit=99999`);
+  if (!response.ok) throw new Error("Failed to fetch pokemons");
+  const data: PokemonListResponse = await response.json();
+  return data.results;
+}
