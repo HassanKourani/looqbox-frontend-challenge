@@ -1,6 +1,15 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Spin, Tag } from "antd";
+import {
+  Radar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
 import { getPokemonByName } from "../api/pokemon";
 import {
   FALLBACK_IMAGE,
@@ -40,7 +49,12 @@ export function PokemonDetail() {
 
   const imageUrl =
     pokemon.sprites.other["official-artwork"].front_default;
-  const totalStats = pokemon.stats.reduce((sum, s) => sum + s.base_stat, 0);
+
+  const chartData = pokemon.stats.map((s) => ({
+    name: STAT_LABELS[s.stat.name] ?? s.stat.name,
+    value: s.base_stat,
+    fill: STAT_COLORS[s.stat.name] ?? "var(--accent)",
+  }));
 
   return (
     <div className="detail-page">
@@ -54,20 +68,18 @@ export function PokemonDetail() {
         </Button>
       </header>
 
-      <div className="detail-layout">
-        <div className="detail-left">
-          <div className="detail-img-wrapper">
-            <img
-              src={imageUrl}
-              alt={pokemon.name}
-              onError={(e) => {
-                e.currentTarget.src = FALLBACK_IMAGE;
-              }}
-            />
-          </div>
+      <div className="detail-top">
+        <div className="detail-img-wrapper">
+          <img
+            src={imageUrl}
+            alt={pokemon.name}
+            onError={(e) => {
+              e.currentTarget.src = FALLBACK_IMAGE;
+            }}
+          />
         </div>
 
-        <div className="detail-right">
+        <div className="detail-info">
           <p className="detail-id">#{String(pokemon.id).padStart(3, "0")}</p>
           <h1 className="detail-name">{pokemon.name}</h1>
 
@@ -83,60 +95,56 @@ export function PokemonDetail() {
             ))}
           </div>
 
-          <div className="detail-info-grid">
-            <div className="info-item">
-              <span className="info-label">Height</span>
-              <span className="info-value">{(pokemon.height / 10).toFixed(1)} m</span>
+          <div className="detail-meta">
+            <div className="meta-item">
+              <span className="meta-label">Height</span>
+              <span className="meta-value">{(pokemon.height / 10).toFixed(1)} m</span>
             </div>
-            <div className="info-item">
-              <span className="info-label">Weight</span>
-              <span className="info-value">{(pokemon.weight / 10).toFixed(1)} kg</span>
+            <div className="meta-item">
+              <span className="meta-label">Weight</span>
+              <span className="meta-value">{(pokemon.weight / 10).toFixed(1)} kg</span>
             </div>
-            <div className="info-item">
-              <span className="info-label">Abilities</span>
-              <span className="info-value">
+            <div className="meta-item">
+              <span className="meta-label">Abilities</span>
+              <span className="meta-value">
                 {pokemon.abilities.map((a) => a.ability.name).join(", ")}
               </span>
             </div>
           </div>
-
-          <div className="detail-stats">
-            <h2>Base Stats</h2>
-            <div className="stats-list">
-              {pokemon.stats.map((s) => {
-                const pct = (s.base_stat / MAX_STAT) * 100;
-                const color = STAT_COLORS[s.stat.name] ?? "var(--accent)";
-                return (
-                  <div key={s.stat.name} className="stat-row">
-                    <span className="stat-label">
-                      {STAT_LABELS[s.stat.name] ?? s.stat.name}
-                    </span>
-                    <span className="stat-value">{s.base_stat}</span>
-                    <div className="stat-bar-bg">
-                      <div
-                        className="stat-bar-fill"
-                        style={{ width: `${pct}%`, backgroundColor: color }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-              <div className="stat-row stat-total">
-                <span className="stat-label">TOT</span>
-                <span className="stat-value">{totalStats}</span>
-                <div className="stat-bar-bg">
-                  <div
-                    className="stat-bar-fill"
-                    style={{
-                      width: `${(totalStats / (MAX_STAT * 6)) * 100}%`,
-                      backgroundColor: "var(--accent)",
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
+      </div>
+
+      <div className="detail-stats">
+        <h2>Base Stats</h2>
+        <ResponsiveContainer width="100%" height={320}>
+          <RadarChart data={chartData} cx="50%" cy="50%" outerRadius="75%">
+            <PolarGrid stroke="var(--border)" />
+            <PolarAngleAxis
+              dataKey="name"
+              tick={{ fontSize: 13, fontFamily: "var(--mono)", fill: "var(--text-h)" }}
+            />
+            <PolarRadiusAxis
+              domain={[0, MAX_STAT]}
+              tick={{ fontSize: 10, fill: "var(--text)" }}
+              axisLine={false}
+            />
+            <Tooltip
+              contentStyle={{
+                background: "var(--bg)",
+                border: "1px solid var(--border)",
+                borderRadius: 8,
+                fontSize: 13,
+              }}
+            />
+            <Radar
+              dataKey="value"
+              stroke="var(--accent)"
+              fill="var(--accent)"
+              fillOpacity={0.25}
+              strokeWidth={2}
+            />
+          </RadarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
