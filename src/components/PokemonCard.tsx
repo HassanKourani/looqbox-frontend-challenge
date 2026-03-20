@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Card } from "antd";
 import type { PokemonListItem } from "../api/pokemon";
 import { getPokemonId, getPokemonImageUrl } from "../api/pokemon";
@@ -10,11 +11,13 @@ interface PokemonCardProps {
 export function PokemonCard({ pokemon }: PokemonCardProps) {
   const id = getPokemonId(pokemon.url);
   const imageUrl = getPokemonImageUrl(id);
+  const navigate = useNavigate();
 
   return (
     <Card
       className="pokemon-card"
       hoverable
+      onClick={() => navigate(`/pokemon/${pokemon.name}`)}
       cover={
         <div className="pokemon-img-wrapper">
           <img

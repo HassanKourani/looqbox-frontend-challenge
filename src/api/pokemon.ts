@@ -36,3 +36,40 @@ export async function getAllPokemons(): Promise<PokemonListItem[]> {
   const data: PokemonListResponse = await response.json();
   return data.results;
 }
+
+export interface PokemonStat {
+  base_stat: number;
+  stat: { name: string };
+}
+
+export interface PokemonType {
+  type: { name: string };
+}
+
+export interface PokemonAbility {
+  ability: { name: string };
+  is_hidden: boolean;
+}
+
+export interface PokemonDetail {
+  id: number;
+  name: string;
+  height: number;
+  weight: number;
+  stats: PokemonStat[];
+  types: PokemonType[];
+  abilities: PokemonAbility[];
+  sprites: {
+    other: {
+      "official-artwork": {
+        front_default: string;
+      };
+    };
+  };
+}
+
+export async function getPokemonByName(name: string): Promise<PokemonDetail> {
+  const response = await fetch(`${BASE_URL}/pokemon/${name}`);
+  if (!response.ok) throw new Error("Failed to fetch pokemon");
+  return response.json();
+}
