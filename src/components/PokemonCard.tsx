@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "antd";
 import type { PokemonListItem } from "../api/pokemon";
 import { getPokemonId, getPokemonImageUrl } from "../api/pokemon";
+import { FALLBACK_IMAGE } from "../constants/pokemon";
 import "./PokemonCard.css";
 
 interface PokemonCardProps {
@@ -25,7 +26,7 @@ export function PokemonCard({ pokemon }: PokemonCardProps) {
             alt={pokemon.name}
             loading="lazy"
             onError={(e) => {
-              e.currentTarget.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png";
+              e.currentTarget.src = FALLBACK_IMAGE;
             }}
           />
         </div>
