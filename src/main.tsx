@@ -7,6 +7,8 @@ import { ConfigProvider, theme } from 'antd'
 import { store } from './store'
 import App from './App.tsx'
 import { PokemonDetail } from './pages/PokemonDetail'
+import { ComparePage } from './pages/ComparePage'
+import { CompareBar } from './components/CompareBar'
 import './index.css'
 
 const queryClient = new QueryClient()
@@ -35,7 +37,9 @@ createRoot(document.getElementById('root')!).render(
             <Routes>
               <Route path="/" element={<App />} />
               <Route path="/pokemon/:name" element={<PokemonDetail />} />
+              <Route path="/compare" element={<ComparePage />} />
             </Routes>
+            <CompareBar />
           </BrowserRouter>
         </ConfigProvider>
       </QueryClientProvider>

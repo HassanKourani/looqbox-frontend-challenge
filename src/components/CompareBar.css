@@ -1,0 +1,60 @@
+.compare-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.compare-bar-inner {
+  max-width: 1126px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.compare-bar-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.compare-bar-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border-radius: 20px;
+}
+
+.compare-bar-chip-remove {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0;
+  opacity: 0.7;
+}
+
+.compare-bar-chip-remove:hover {
+  opacity: 1;
+}
+
+.compare-bar-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
