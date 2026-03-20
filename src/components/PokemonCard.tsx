@@ -1,0 +1,32 @@
+import { Card } from "antd";
+import type { PokemonListItem } from "../api/pokemon";
+import { getPokemonId, getPokemonImageUrl } from "../api/pokemon";
+import "./PokemonCard.css";
+
+interface PokemonCardProps {
+  pokemon: PokemonListItem;
+}
+
+export function PokemonCard({ pokemon }: PokemonCardProps) {
+  const id = getPokemonId(pokemon.url);
+  const imageUrl = getPokemonImageUrl(id);
+
+  return (
+    <Card
+      className="pokemon-card"
+      hoverable
+      cover={
+        <div className="pokemon-img-wrapper">
+          <img
+            src={imageUrl}
+            alt={pokemon.name}
+            loading="lazy"
+          />
+        </div>
+      }
+    >
+      <p className="pokemon-id">#{id.padStart(3, "0")}</p>
+      <p className="pokemon-name">{pokemon.name}</p>
+    </Card>
+  );
+}
